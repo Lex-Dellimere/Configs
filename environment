@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+
+# elixir-ls
+export PATH=$PATH:$HOME/.elixir-ls/release
+
+# PATH
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.config/emacs/bin:$PATH"
+
+# Better ls
+alias ls='eza --long --binary --git --git-repos --grid'
+
+# Better cd
+alias cd='z'
+
+# FZF History Search
+if command -v fzf >/dev/null; then
+    __fzf_history_search() {
+        local result cmd
+        result=$(history | fzf --reverse --height=15 --preview="echo {}" --preview-window=down:3)
+        [[ -n "$result" ]] && cmd=$(echo "$result" | sed -E 's/^[[:space:]]*[0-9]+[[:space:]]+//')
+        [[ -n "$cmd" ]] && {
+            READLINE_LINE="$cmd"
+            READLINE_POINT=${#cmd}
+        }
+    }
+    bind -x '"\C-r": __fzf_history_search'
+fi
+
+# Prompt
+export PS1="\[\e[1;35m\]WAKE UP SAMURAI!\[\e[0m\]\n\[\e[38;5;154m\][\u@\h \t] \[\e[36m\]\w > \[\e[0m\]"
+
+# Tools
+eval "$(zoxide init bash)"
+
+export PATH=/home/nox/bin:$PATH
